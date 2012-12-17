@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+		<meta name="viewport" content="target-densitydpi=device-dpi, initial-scale=1.0, user-scalable=no" />
+		<title>Uvod do IT</title>
+		<link rel="stylesheet" href="jquery.mobile-1.2.0.css" type="text/css" media="screen" title="no title" charset="utf-8">
+		<script src="jquery-1.8.2.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="jquery.mobile-1.2.0.js" type="text/javascript" charset="utf-8"></script>
+		<script src="questions.js" type="text/javascript" charset="utf-8"></script>
+		<script>
+			$(function(){
+				// var districts = $(loadDistricts());
+				questions = [];
+				$(Object.keys(it_data)).each(function(i, key){
+					questions.push([key, it_data[key]]);
+				});
+				questions = $(questions);
+				
+				
+				var highlight = function(text, keyword){
+					return text.replace(keyword, "<span class=\"highlight\">"+keyword+"</span>");
+				}
+				
+				$('#search-district').bind('keyup',function(event, ui){
+					value = this.value.toLowerCase();
+					$('#search-results').empty();
+					questions.each(function(index,d){
+						if((d[0].toLowerCase().match(value) || d[1].toLowerCase().match(value)) && value != '')
+						$("<div data-role=\"collapsible\"><h3>"+highlight(d[0], value)+"</h3><p>"+highlight(d[1], value)+"</p></div>").appendTo('#search-results');
+					});
+				});
+			});
+		</script>
+		<style type="text/css" media="screen">
+			h3{
+				font-size:22px;
+			}
+			p {
+				font-size:20px;
+			}
+			
+			span.highlight{
+				background-color: #E4F97F;
+			}
+		</style>
+	</head>
+	<body>
+		<div data-role="page">
+
+			<div data-role="header" data-theme="b">
+				<h1>Uvod do IT</h1>
+			</div><!-- /header -->
+
+			<div data-role="content" data-theme="b">	
+				<input type="search" name="search" id="search-district" value="" autocomplete="off" style="font-size:35px;"/>	
+				<div id="search-results"></div>
+			</div><!-- /content -->
+
+			<div data-role="footer" data-theme="b">
+			</div><!-- /header -->
+		</div><!-- /page -->
+	</body>
+</html>
