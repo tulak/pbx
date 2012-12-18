@@ -18,16 +18,27 @@
 				questions = $(questions);
 				
 				
-				var highlight = function(text, keyword){
-					return text.replace(keyword, "<span class=\"highlight\">"+keyword+"</span>");
+				var highlight = function(text, keywords){
+					$(keywords).each(function(index, keyword){
+						text = text.replace(keyword, "<span class=\"highlight\">"+keyword+"</span>");
+					});
+					return text;
+				}
+				
+				var matchAll = function(text, keywords){
+					r = keywords.map(function(k){
+						return text.match(k)
+					});
+					return r.indexOf(null) < 0;
 				}
 				
 				$('#search-district').bind('keyup',function(event, ui){
 					value = this.value.toLowerCase();
+					values = value.split(/ /);
 					$('#search-results').empty();
 					questions.each(function(index,d){
-						if((d[0].toLowerCase().match(value) || d[1].toLowerCase().match(value)) && value != '')
-						$("<div data-role=\"collapsible\"><h3>"+highlight(d[0], value)+"</h3><p>"+highlight(d[1], value)+"</p></div>").appendTo('#search-results');
+						if((matchAll(d[0].toLowerCase(), values) || matchAll(d[1].toLowerCase(), values)) && value != '')
+						$("<div data-role=\"collapsible\"><h3>"+highlight(d[0], values)+"</h3><p>"+highlight(d[1], values)+"</p></div>").appendTo('#search-results');
 					});
 				});
 			});
